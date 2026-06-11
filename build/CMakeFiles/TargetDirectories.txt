@@ -1,0 +1,3 @@
+/mnt/c/dev/LOB/build/CMakeFiles/orderbook.dir
+/mnt/c/dev/LOB/build/CMakeFiles/edit_cache.dir
+/mnt/c/dev/LOB/build/CMakeFiles/rebuild_cache.dir
