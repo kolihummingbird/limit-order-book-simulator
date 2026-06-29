@@ -38,7 +38,7 @@ public:
 
             std::cout << "Trade | buy_id =" <<currentBid.id
                       << " sell_id=" << currentAsk.id
-                      << " price=" << ask.Price
+                      << " price=" << askPrice
                       << " qty=" << minimal << std::endl;
             
             // Case A: Both fill
@@ -85,6 +85,64 @@ public:
                 }
             }
 
+        }
+    }
+
+    void addMarketOrder(Order order)
+    {
+        if (order.side == Side::BID)
+        {
+            while (order.quantity > 0 && !asks.empty())
+            {
+                auto& currentAsk = asks.begin()->second.front();
+                uint32_t minimal = std::min(order.quantity, currentAsk.quantity);
+
+                std::cout << "TRADE | buy_id=" << order.id
+                    << " sell_id=" << currentAsk.id
+                    << " price=" << asks.begin()->first
+                    << " qty=" << minimal << "\n";
+
+                if (minimal == currentAsk.quantity)
+                {
+                    uint64_t askId = currentAsk.id;
+                    asks.begin()->second.erase(asks.begin()->second.begin());
+                    if (asks.begin()->second.empty()) asks.erase(asks.begin());
+                    lookup.erase(askId);
+                }
+                else
+                {
+                    asks.begin()->second.front().quantity -= minimal;
+                }
+                order.quantity -= minimal;
+            }
+        }
+
+        else // Side::ASK
+        {
+            while (order.quantity > 0 && !bids.empty())
+            {
+                auto& currentBid = bids.begin()->second.front();
+                uint32_t minimal = std::min(order.quantity, currentBid.quantity);
+
+                std::cout << "TRADE | buy_id=" << currentBid.id
+                          << " sell_id=" << order.id
+                          << " price=" << bids.begin()->first
+                          << " qty=" << minimal << "\n";
+                
+                if (minimal == currentBid.quantity)
+                {
+                    uint64_t bidId = currentBid.id;
+                    bids.begin()->second.erase(bids.begin()->second.begin());
+                    if (bids.begin()->second.empty()) bids.erase(bids.begin());
+                    lookup.erase(bidId);
+                }
+                else
+                {
+                    bids.begin()->second.front().quantity -= minimal;
+                }
+                order.quantity -= minimal;
+            }
+        
         }
     }
     

@@ -13,6 +13,18 @@ int main()
     << " " << OrderTwo.price << " " << OrderTwo.quantity << " " << OrderTwo.timestamp << std::endl;
 
     OrderBook orderBook;
+
+    orderBook.addLimitOrder({1, Side::ASK, Type::LIMIT, 100.0, 10, 1000});
+
+    orderBook.addLimitOrder({2, Side::BID, Type::LIMIT, 101.0, 7, 2000});
+
+    orderBook.printBook(5);
+
+    orderBook.addMarketOrder({3, Side::BID, Type::MARKET, 0.0, 3, 3000});
+
+    orderBook.printBook(5);
+    
+    /*
     orderBook.addLimitOrder( {1, Side::BID, Type::LIMIT, 109.7, 3, 2000});
     orderBook.addLimitOrder( {2, Side::BID, Type::LIMIT, 111.5, 7, 2000});
     orderBook.addLimitOrder( {3, Side::BID, Type::LIMIT, 105.2, 10, 2000});
@@ -26,4 +38,5 @@ int main()
     orderBook.addLimitOrder( {10, Side::ASK, Type::LIMIT, 115.0, 50, 2000});
 
     orderBook.printBook(3);
+    */
 }
